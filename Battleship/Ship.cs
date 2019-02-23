@@ -9,6 +9,8 @@ namespace Battleship
     public struct Ship
     {
 
+        public int gay { get; set; }
+
         private bool isVertical;
         private int startPosY;
         private int startPosX;
