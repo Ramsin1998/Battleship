@@ -91,6 +91,8 @@ namespace Battleship
                 player.PersonalBoard.Print(5, 5);
 
                 Console.ReadLine();
+
+                
             }
 
             //player.PersonalBoard.PlaceShipsByPlayerInput();

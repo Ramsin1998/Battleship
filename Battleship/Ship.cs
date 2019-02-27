@@ -12,7 +12,7 @@ namespace Battleship
         private int startPosY;
         private int startPosX;
 
-        public int Length { get; set; }
+        public int Length{ get; set; }
 
         public bool IsVertical
         {

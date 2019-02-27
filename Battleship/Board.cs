@@ -134,12 +134,12 @@ namespace Battleship
                             ship.StartPosY++;
                             break;
 
-                        case (ConsoleKey.RightArrow):
-                            ship.StartPosX++;
-                            break;
-
                         case (ConsoleKey.LeftArrow):
                             ship.StartPosX--;
+                            break;
+
+                        case (ConsoleKey.RightArrow):
+                            ship.StartPosX++;
                             break;
 
                         case (ConsoleKey.Spacebar):
@@ -165,45 +165,48 @@ namespace Battleship
 
         private static BoardState[,] placeShip(this BoardState[,] board, Ship ship)
         {
-            bool isInvalid = checkIfShipWillBeInvalid(board, ship);
+            bool isInvalid = ifShipPlacementWillBeInvalid(board, ship);
 
             int x = ship.StartPosX;
             int y = ship.StartPosY;
 
             for (int i = 0; i < ship.Length; i++)
             {
-                try { board[ship.StartPosX, ship.StartPosY] = isInvalid ? BoardState.InvalidShip : BoardState.Ship; }
+                try { board[x, y] = isInvalid ? BoardState.InvalidShip : BoardState.Ship; }
                 catch (IndexOutOfRangeException) { continue; }
 
                 if (ship.IsVertical)
-                    ship.StartPosY++;
+                    y++;
                 else
-                    ship.StartPosX++;
+                    x++;
             }
 
             return board;
         }
 
-        private static bool checkIfShipWillBeInvalid(BoardState[,] board, Ship ship)
+        private static bool ifShipPlacementWillBeInvalid(BoardState[,] board, Ship ship)
         {
+            int x = ship.StartPosX;
+            int y = ship.StartPosY;
+
             for (int i = 0; i < ship.Length; i++)
             {
-                if (blockAndSurroundingBlocksAreShip(board, ship, i == 0))
+                if (ifShipBlockIsInvalid(board, ship, x, y, i == 0))
                     return true;
 
                 if (ship.IsVertical)
-                    ship.StartPosY++;
+                    y++;
                 else
-                    ship.StartPosX++;
+                    x++;
             }
 
             return false;
         }
 
-        private static bool blockAndSurroundingBlocksAreShip(BoardState[,] board, Ship ship, bool firstBlock)
+        private static bool ifShipBlockIsInvalid(BoardState[,] board, Ship ship, int blockX, int blockY, bool firstBlock)
         {
-            int posX = ship.StartPosX - 1;
-            int posY = ship.StartPosY - 1;
+            blockX--;
+            blockY--;
 
             for (int y = 0; y < 3; y++)
                 for (int x = 0; x < 3; x++)
@@ -225,7 +228,7 @@ namespace Battleship
                             }
                         }
 
-                        if (board[posX + x, posY + y] == BoardState.Ship)
+                        if (board[blockX + x, blockY + y] == BoardState.Ship)
                             return true;
                     }
                     catch (IndexOutOfRangeException) { continue; }
