@@ -8,9 +8,9 @@ using System.Diagnostics;
 
 namespace Battleship
 {
-    class Program
+    static class Program
     {
-        static public List<Player> Players = new List<Player>();
+        public static List<Player> Players = new List<Player>();
 
         static string getText()
         {
@@ -96,23 +96,17 @@ namespace Battleship
 
         static void Main(string[] args)
         {
-            //intro();
+            intro();
 
-            //Console.SetCursorPosition(104, 30);
-            //Console.Write("Your name: ");
+            Console.SetCursorPosition(104, 30);
+            Console.Write("Your name: ");
 
-            //string input = getText();
-            //if (input == "2")
-            //    secretScript();
+            string input = getText();
+            if (input == "2")
+                secretScript();
 
-            //else
-            //    mainScript();
-
-
-
-            Console.ReadLine();
+            else
+                mainScript();
         }
-
-
     }
 }

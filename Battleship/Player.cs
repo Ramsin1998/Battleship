@@ -50,7 +50,7 @@ namespace Battleship
 
         }
 
-        public BoardState[,] AttckBoard = new BoardState[10, 10];
-        public BoardState[,] PersonalBoard = new BoardState[10, 10];
+        public EBoard[,] AttckBoard = new EBoard[10, 10];
+        public EBoard[,] PersonalBoard = new EBoard[10, 10];
     }
 }

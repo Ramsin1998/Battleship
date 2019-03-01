@@ -76,5 +76,16 @@ namespace Battleship
             Console.SetCursorPosition(left, 30);
             Console.Write(text);
         }
+
+        public static void WriteParagraph(string text, int left, int top)
+        {
+            string[] textBlocks = text.Split('\n');
+
+            for (int i = 0; i < textBlocks.Length; i++)
+            {
+                Console.SetCursorPosition(left, top + i);
+                Console.Write(textBlocks[i]);
+            }
+        }
     }
 }
