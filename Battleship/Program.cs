@@ -12,23 +12,6 @@ namespace Battleship
     {
         public static List<Player> Players = new List<Player>();
 
-        static string getText()
-        {
-            string text;
-            int y = Console.CursorTop;
-            int x = Console.CursorLeft;
-
-            while (true)
-            {
-                Console.SetCursorPosition(x, y);
-                text = Console.ReadLine();
-                if (!string.IsNullOrWhiteSpace(text))
-                    break;
-            }
-
-            return text;
-        }
-
         static void intro()
         {
             Console.WriteLine("psst! ...press Alt+Enter!");
@@ -64,10 +47,10 @@ namespace Battleship
             {
                 Console.SetCursorPosition(104, 30);
                 Console.Write($"Player {i+1}: ");
-                Players.Add(new Player(getText()));
+                Players.Add(new Player(Utilities.GetText()));
                 Console.Clear();
             }
-
+            
             game();
         }
 
@@ -101,7 +84,7 @@ namespace Battleship
             Console.SetCursorPosition(104, 30);
             Console.Write("Your name: ");
 
-            string input = getText();
+            string input = Utilities.GetText();
             if (input == "2")
                 secretScript();
 

@@ -87,5 +87,22 @@ namespace Battleship
                 Console.Write(textBlocks[i]);
             }
         }
+
+        public static string GetText()
+        {
+            string text;
+            int y = Console.CursorTop;
+            int x = Console.CursorLeft;
+
+            while (true)
+            {
+                Console.SetCursorPosition(x, y);
+                text = Console.ReadLine();
+                if (!string.IsNullOrWhiteSpace(text))
+                    break;
+            }
+
+            return text;
+        }
     }
 }
