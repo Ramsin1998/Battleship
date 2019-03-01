@@ -10,6 +10,8 @@ namespace Battleship
 {
     class Program
     {
+        static public List<Player> Players = new List<Player>();
+
         static string getText()
         {
             string text;
@@ -20,7 +22,7 @@ namespace Battleship
             {
                 Console.SetCursorPosition(x, y);
                 text = Console.ReadLine();
-                if (!String.IsNullOrWhiteSpace(text))
+                if (!string.IsNullOrWhiteSpace(text))
                     break;
             }
 
@@ -54,14 +56,19 @@ namespace Battleship
 
         static void secretScript()
         {
-            Console.SetCursorPosition(5,5);
-            Console.Write("Player 1: ");
-            Player player1 = new Player(getText());
             Console.Clear();
 
-            Console.Write("Player 2: ");
-            Player player2 = new Player(getText());
+            List<Player> players = new List<Player>();
 
+            for (int i = 0; i < 2; i++)
+            {
+                Console.SetCursorPosition(104, 30);
+                Console.Write($"Player {i+1}: ");
+                Players.Add(new Player(getText()));
+                Console.Clear();
+            }
+
+            game();
         }
 
         static void mainScript()
@@ -69,9 +76,28 @@ namespace Battleship
             Console.WriteLine("cuntfacemcgee");
         }
 
+        static void game()
+        {
+            foreach(var player in Players)
+            {
+                Console.SetCursorPosition(90, 30);
+
+                Utilities.WriteInMiddle($"{player.Name}, would you like your ships to be placed randomly? Y/N");
+
+                if (Utilities.YesOrNo())
+                    player.PersonalBoard = Board.PlaceShipsRandomly();
+
+                else
+                    player.PersonalBoard = Board.PlaceShipsByPlayerInput();
+
+                Console.Clear();
+            }
+        }
+
         static void Main(string[] args)
         {
-            intro();
+            //intro();
+
             //Console.SetCursorPosition(104, 30);
             //Console.Write("Your name: ");
 
@@ -82,22 +108,11 @@ namespace Battleship
             //else
             //    mainScript();
 
-            Player player = new Player("");
 
-            while (true)
-            {
-                player.PersonalBoard = Board.PlaceShipsRandomly();
-
-                player.PersonalBoard.Print(5, 5);
-
-                Console.ReadLine();
-
-                
-            }
-
-            //player.PersonalBoard.PlaceShipsByPlayerInput();
 
             Console.ReadLine();
         }
+
+
     }
 }

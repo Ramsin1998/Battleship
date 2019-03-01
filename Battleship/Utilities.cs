@@ -50,5 +50,31 @@ namespace Battleship
                 return (T)formatter.Deserialize(ms);
             }
         }
+
+        public static bool YesOrNo()
+        {
+            while (true)
+            {
+                switch (Console.ReadKey(true).Key)
+                {
+                    case ConsoleKey.Y:
+                        return true;
+
+                    case ConsoleKey.N:
+                        return false;
+
+                    default:
+                        continue;
+                }
+            }
+        }
+
+        public static void WriteInMiddle(string text)
+        {
+            int left = (Console.BufferWidth - text.Length)/2;
+
+            Console.SetCursorPosition(left, 30);
+            Console.Write(text);
+        }
     }
 }

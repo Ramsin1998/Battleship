@@ -86,27 +86,42 @@ namespace Battleship
 
         public static BoardState[,] PlaceShipsRandomly()
         {
-            BoardState[,] boardToReturn = new BoardState[10, 10];
-            BoardState[,] tmpBoard = new BoardState[10, 10];
-
-            for (int i = 0; i < Ship.ShipLengths.Count(); i++)
+            while (true)
             {
-                bool done = false;
-                while (!done)
-                {
-                    Ship ship = new Ship(Ship.ShipLengths[i], true);
-                    tmpBoard = Utilities.DeepClone(boardToReturn);
-                    tmpBoard.placeShip(ship);
+                BoardState[,] boardToReturn = new BoardState[10, 10];
+                BoardState[,] tmpBoard = new BoardState[10, 10];
 
-                    if (!tmpBoard.Any(item => item == BoardState.InvalidShip))
+                for (int i = 0; i < Ship.ShipLengths.Count(); i++)
+                {
+                    while (true)
                     {
-                        boardToReturn = Utilities.DeepClone(tmpBoard);
-                        break;
+                        Ship ship = new Ship(Ship.ShipLengths[i], true);
+                        tmpBoard = Utilities.DeepClone(boardToReturn);
+                        tmpBoard.placeShip(ship);
+
+                        if (!tmpBoard.Any(item => item == BoardState.InvalidShip))
+                        {
+                            boardToReturn = Utilities.DeepClone(tmpBoard);
+                            break;
+                        }
                     }
                 }
-            }
 
-            return boardToReturn;
+                boardToReturn.Print(85, 15);
+
+                input:
+                switch (Console.ReadKey(true).Key)
+                {
+                    case ConsoleKey.Enter:
+                        return boardToReturn;
+
+                    case ConsoleKey.Spacebar:
+                        continue;
+
+                    default:
+                        goto input;
+                }
+            }
         }
 
         public static BoardState[,] PlaceShipsByPlayerInput()
@@ -126,27 +141,27 @@ namespace Battleship
 
                     switch (Console.ReadKey(true).Key)
                     {
-                        case (ConsoleKey.UpArrow):
+                        case ConsoleKey.UpArrow:
                             ship.StartPosY--;
                             break;
 
-                        case (ConsoleKey.DownArrow):
+                        case ConsoleKey.DownArrow:
                             ship.StartPosY++;
                             break;
 
-                        case (ConsoleKey.LeftArrow):
+                        case ConsoleKey.LeftArrow:
                             ship.StartPosX--;
                             break;
 
-                        case (ConsoleKey.RightArrow):
+                        case ConsoleKey.RightArrow:
                             ship.StartPosX++;
                             break;
 
-                        case (ConsoleKey.Spacebar):
+                        case ConsoleKey.Spacebar:
                             ship.IsVertical = !ship.IsVertical;
                             break;
 
-                        case (ConsoleKey.Enter):
+                        case ConsoleKey.Enter:
                             if (!tmpBoard.Any(item => item == BoardState.InvalidShip))
                             {
                                 boardToReturn = Utilities.DeepClone(tmpBoard);
