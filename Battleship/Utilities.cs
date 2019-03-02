@@ -69,22 +69,43 @@ namespace Battleship
             }
         }
 
-        public static void WriteInMiddle(string text)
+        public static void WriteInMiddle(this string text)
         {
-            int left = (Console.BufferWidth - text.Length)/2;
+            string newText = "";
+            int left = 0;
 
-            Console.SetCursorPosition(left, 30);
-            Console.Write(text);
+            foreach (char c in text)
+            {
+                newText += c;
+
+                left = (Console.BufferWidth - newText.Length) / 2;
+                Console.SetCursorPosition(left, 30);
+
+                Console.Write(newText);
+
+                System.Threading.Thread.Sleep(1);
+            }
         }
 
-        public static void WriteParagraph(string text, int left, int top)
+        public static void FancyWrite(this string text)
+        {
+            foreach (char c in text)
+            {
+                Console.Write(c);
+
+                System.Threading.Thread.Sleep(1);
+            }
+        }
+
+        public static void WriteParagraph(this string text, int left, int top)
         {
             string[] textBlocks = text.Split('\n');
 
             for (int i = 0; i < textBlocks.Length; i++)
             {
                 Console.SetCursorPosition(left, top + i);
-                Console.Write(textBlocks[i]);
+
+                FancyWrite(textBlocks[i]);
             }
         }
 

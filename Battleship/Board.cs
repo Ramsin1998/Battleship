@@ -86,6 +86,8 @@ namespace Battleship
 
         public static EBoard[,] PlaceShipsRandomly()
         {
+            Console.Clear();
+
             Utilities.WriteParagraph(
                 "SPACE: Randomize again\n" +
                 "ENTER: Done", 153, 22);
@@ -130,6 +132,8 @@ namespace Battleship
 
         public static EBoard[,] PlaceShipsByPlayerInput()
         {
+            Console.Clear();
+
             Console.OutputEncoding = Encoding.Unicode;
             Utilities.WriteParagraph(
                 "↑: Up\n" +

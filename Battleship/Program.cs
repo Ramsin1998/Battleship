@@ -23,7 +23,9 @@ namespace Battleship
             Console.Clear();
             Console.SetBufferSize(Console.WindowWidth, Console.WindowHeight);
             Console.CursorVisible = false;
+
             Random rng = new Random();
+
             Stopwatch timer = new Stopwatch();
             timer.Start();
 
@@ -41,12 +43,9 @@ namespace Battleship
         {
             Console.Clear();
 
-            List<Player> players = new List<Player>();
-
             for (int i = 0; i < 2; i++)
             {
-                Console.SetCursorPosition(104, 30);
-                Console.Write($"Player {i+1}: ");
+                Utilities.WriteInMiddle($"Player {i+1}: ");
                 Players.Add(new Player(Utilities.GetText()));
                 Console.Clear();
             }
@@ -63,9 +62,7 @@ namespace Battleship
         {
             foreach(var player in Players)
             {
-                Console.SetCursorPosition(90, 30);
-
-                Utilities.WriteInMiddle($"{player.Name}, would you like your ships to be placed randomly? Y/N");
+                Utilities.WriteInMiddle($"Player: {player.Name}, would you like your ships to be placed randomly? Y/N");
 
                 if (Utilities.YesOrNo())
                     player.PersonalBoard = Board.PlaceShipsRandomly();
@@ -81,8 +78,7 @@ namespace Battleship
         {
             intro();
 
-            Console.SetCursorPosition(104, 30);
-            Console.Write("Your name: ");
+            Utilities.WriteInMiddle("Your name: ");
 
             string input = Utilities.GetText();
             if (input == "2")
