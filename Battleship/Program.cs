@@ -45,11 +45,11 @@ namespace Battleship
 
             for (int i = 0; i < 2; i++)
             {
-                Utilities.TypeWrite($"Player {i+1}: ");
+                Utilities.TypeWrite($"Player {i + 1}: ");
                 Players.Add(new Player(Utilities.GetText()));
                 Console.Clear();
             }
-            
+
             game();
         }
 
@@ -60,18 +60,22 @@ namespace Battleship
 
         static void game()
         {
-            foreach(var player in Players)
-            {
-                Utilities.TypeWrite($"Player: {player.Name}, would you like your ships to be placed randomly? Y/N");
+            Players[0].Opponent = Players[1];
+            Players[1].Opponent = Players[0];
 
-                if (Utilities.YesOrNo())
-                    player.PersonalBoard = Board.PlaceShipsRandomly();
+            while (true)
+                foreach (var player in Players)
+                {
+                    player.StartTurn();
 
-                else
-                    player.PersonalBoard = Board.PlaceShipsByPlayerInput();
+                    if (player.AttckBoard.Count(e => e == EBoard.Hit) == 17)
+                        winningSequence(player);
+                }
+        }
 
-                Console.Clear();
-            }
+        static void winningSequence(Player winner)
+        {
+
         }
 
         static void Main(string[] args)

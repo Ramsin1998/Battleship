@@ -23,6 +23,17 @@ namespace Battleship
             return false;
         }
 
+        public static int Count(this EBoard[,] board, Func<EBoard, bool> predicate)
+        {
+            int c = 0;
+
+            foreach (var e in board)
+                if (predicate(e))
+                    c++;
+
+            return c;
+        }
+
         public static void Print(this EBoard[,] board, int left, int top)
         {
             for (int i = 0; i < 10; i++)
