@@ -45,7 +45,7 @@ namespace Battleship
 
             for (int i = 0; i < 2; i++)
             {
-                Utilities.WriteInMiddle($"Player {i+1}: ");
+                Utilities.TypeWrite($"Player {i+1}: ");
                 Players.Add(new Player(Utilities.GetText()));
                 Console.Clear();
             }
@@ -62,7 +62,7 @@ namespace Battleship
         {
             foreach(var player in Players)
             {
-                Utilities.WriteInMiddle($"Player: {player.Name}, would you like your ships to be placed randomly? Y/N");
+                Utilities.TypeWrite($"Player: {player.Name}, would you like your ships to be placed randomly? Y/N");
 
                 if (Utilities.YesOrNo())
                     player.PersonalBoard = Board.PlaceShipsRandomly();
@@ -78,7 +78,7 @@ namespace Battleship
         {
             intro();
 
-            Utilities.WriteInMiddle("Your name: ");
+            Utilities.TypeWrite("Your name: ");
 
             string input = Utilities.GetText();
             if (input == "2")

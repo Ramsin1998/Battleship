@@ -69,21 +69,23 @@ namespace Battleship
             }
         }
 
-        public static void WriteInMiddle(this string text)
+        public static void Wait(int ms)
         {
-            string newText = "";
-            int left = 0;
+            DateTime start = DateTime.Now;
 
-            foreach (char c in text)
+            while (true)
+                if ((DateTime.Now - start).TotalMilliseconds > ms)
+                    return;
+        }
+
+        public static void TypeWrite(this string text, int left = 117, int top = 33)
+        {
+            for (int i = 0; i < text.Length; i++)
             {
-                newText += c;
+                Console.SetCursorPosition(left - i/2, top);
+                Console.Write(text.Substring(0, i + 1));
 
-                left = (Console.BufferWidth - newText.Length) / 2;
-                Console.SetCursorPosition(left, 30);
-
-                Console.Write(newText);
-
-                System.Threading.Thread.Sleep(1);
+                Wait(10);
             }
         }
 
@@ -92,8 +94,7 @@ namespace Battleship
             foreach (char c in text)
             {
                 Console.Write(c);
-
-                System.Threading.Thread.Sleep(1);
+                Wait(10);
             }
         }
 
