@@ -123,13 +123,14 @@ namespace Battleship
                                 Utilities.TypeWrite("Hit!");
 
                                 AttckBoard[cursorPosX, cursorPosY] = EBoard.Hit;
+                                Opponent.PersonalBoard[cursorPosX, cursorPosY] = EBoard.DeadShip;
 
                                 int newCursorPosX = cursorPosX - 1;
                                 int newCursorPosY = cursorPosY - 1;
 
                                 for (int y = 0; y < 2; y++)
                                     for (int x = 0; x < 2; x++)
-                                        try { AttckBoard[newCursorPosX + x * 2, newCursorPosY + y * 2] = EBoard.Miss; }
+                                        try { AttckBoard[newCursorPosX + x * 2, newCursorPosY + y * 2] = EBoard.DeadZone; }
 
                                         catch { continue; }
 
@@ -143,8 +144,13 @@ namespace Battleship
                                 Console.Clear();
 
                                 AttckBoard[cursorPosX, cursorPosY] = EBoard.Miss;
+                                Opponent.PersonalBoard[cursorPosX, cursorPosY] = EBoard.Miss;
+
                                 return;
                         }
+
+                        if (!Opponent.PersonalBoard.Any(e => e == EBoard.Ship))
+                            Program.WinningSequence(Opponent.Opponent);
 
                         break;
                 }

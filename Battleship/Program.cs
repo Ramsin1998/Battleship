@@ -68,14 +68,18 @@ namespace Battleship
                 {
                     player.StartTurn();
 
-                    if (player.AttckBoard.Count(e => e == EBoard.Hit) == 17)
-                        winningSequence(player);
+                    if (!player.Opponent.PersonalBoard.Any(e => e == EBoard.Ship))
+                        WinningSequence(player);
                 }
         }
 
-        static void winningSequence(Player winner)
+        public static void WinningSequence(Player winner)
         {
+            Console.Clear();
 
+            Console.WriteLine(winner.Name);
+
+            Console.ReadLine();
         }
 
         static void Main(string[] args)

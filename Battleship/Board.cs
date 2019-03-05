@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Battleship
 {
-    enum EBoard { Neutral, Hit, Miss, Ship, InvalidShip }
+    enum EBoard { Neutral, Hit, Miss, Ship, InvalidShip, DeadShip, DeadZone }
 
     static class Board
     {
@@ -80,15 +80,23 @@ namespace Battleship
                             break;
 
                         case (EBoard.Miss):
-                            neutral.DrawRect(6, ConsoleColor.DarkGray, ConsoleColor.Black);
+                            hit.DrawRect(6, ConsoleColor.DarkGray);
                             break;
 
                         case (EBoard.Neutral):
                             neutral.DrawRect(6, ConsoleColor.Blue, ConsoleColor.Cyan);
                             break;
 
+                        case (EBoard.DeadZone):
+                            neutral.DrawRect(6, ConsoleColor.DarkGray);
+                            break;
+
                         case (EBoard.InvalidShip):
                             ship.DrawRect(6, ConsoleColor.DarkRed);
+                            break;
+
+                        case (EBoard.DeadShip):
+                            ship.DrawRect(6, ConsoleColor.DarkGray, ConsoleColor.Black);
                             break;
                     }
                 }
