@@ -45,6 +45,11 @@ namespace Battleship
             }
         }
 
+        public Grid[,] AttckBoard = new Grid[10, 10];
+        public Grid[,] PersonalBoard = new Grid[10, 10];
+
+        public Player Opponent;
+
         public string Name;
         public Player(string name)
         {
@@ -113,43 +118,43 @@ namespace Battleship
 
                     case ConsoleKey.Enter:
 
-                        if (AttckBoard[cursorPosX, cursorPosY] == EBoard.Miss)
+                        if (AttckBoard[cursorPosX, cursorPosY] == Grid.Miss)
                             continue;
 
                         switch (Opponent.PersonalBoard[cursorPosX, cursorPosY])
                         {
-                            case EBoard.Ship:
+                            case Grid.Ship:
 
                                 Utilities.TypeWrite("Hit!");
 
-                                AttckBoard[cursorPosX, cursorPosY] = EBoard.Hit;
-                                Opponent.PersonalBoard[cursorPosX, cursorPosY] = EBoard.DeadShip;
+                                AttckBoard[cursorPosX, cursorPosY] = Grid.Hit;
+                                Opponent.PersonalBoard[cursorPosX, cursorPosY] = Grid.DeadShip;
 
                                 int newCursorPosX = cursorPosX - 1;
                                 int newCursorPosY = cursorPosY - 1;
 
                                 for (int y = 0; y < 2; y++)
                                     for (int x = 0; x < 2; x++)
-                                        try { AttckBoard[newCursorPosX + x * 2, newCursorPosY + y * 2] = EBoard.DeadZone; }
+                                        try { AttckBoard[newCursorPosX + x * 2, newCursorPosY + y * 2] = Grid.DeadZone; }
 
                                         catch { continue; }
 
                                 break;
 
-                            case EBoard.Neutral:
+                            case Grid.Neutral:
 
                                 Console.Clear();
                                 Utilities.TypeWrite("Miss!");
                                 Utilities.Wait(1000);
                                 Console.Clear();
 
-                                AttckBoard[cursorPosX, cursorPosY] = EBoard.Miss;
-                                Opponent.PersonalBoard[cursorPosX, cursorPosY] = EBoard.Miss;
+                                AttckBoard[cursorPosX, cursorPosY] = Grid.Miss;
+                                Opponent.PersonalBoard[cursorPosX, cursorPosY] = Grid.Miss;
 
                                 return;
                         }
 
-                        if (!Opponent.PersonalBoard.Any(e => e == EBoard.Ship))
+                        if (!Opponent.PersonalBoard.Any(e => e == Grid.Ship))
                             Program.WinningSequence(Opponent.Opponent);
 
                         break;
@@ -157,9 +162,5 @@ namespace Battleship
             }
         }
 
-        public EBoard[,] AttckBoard = new EBoard[10, 10];
-        public EBoard[,] PersonalBoard = new EBoard[10, 10];
-
-        public Player Opponent;
     }
 }

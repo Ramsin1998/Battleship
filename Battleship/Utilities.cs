@@ -78,14 +78,21 @@ namespace Battleship
                     return;
         }
 
-        public static void TypeWrite(this string text, int left = 117, int top = 33)
+        public static void TypeWrite(this string text, int left = 117, int top = 33, int WaitTime = 10)
         {
+            int newLeft = 0;
+
             for (int i = 0; i < text.Length; i++)
             {
-                Console.SetCursorPosition(left - i/2, top);
+                newLeft = left - i / 2;
+
+                if (newLeft < 0)
+                    newLeft = 0;
+
+                Console.SetCursorPosition(newLeft, top);
                 Console.Write(text.Substring(0, i + 1));
 
-                Wait(10);
+                Wait(WaitTime);
             }
         }
 

@@ -6,11 +6,23 @@ using System.Threading.Tasks;
 
 namespace Battleship
 {
-    enum EBoard { Neutral, Hit, Miss, Ship, InvalidShip, DeadShip, DeadZone }
+    enum Grid { Neutral, Hit, Miss, Ship, InvalidShip, DeadShip, DeadZone }
 
     static class Board
     {
-        public static bool Any(this EBoard[,] board, Func<EBoard,bool> predicate)
+        private static string ship = "/----\\" +
+                                     "| [] |" +
+                                    "\\----/";
+
+        private static string hit = " \\  / " +
+                                    "  ><  " +
+                                    " /  \\ ";
+
+        private static string neutral = "^^^^^^" +
+                                        "^^^^^^" +
+                                        "^^^^^^";
+
+        public static bool Any(this Grid[,] board, Func<Grid,bool> predicate)
         {
             int xLength = board.GetLength(0);
             int yLength = board.GetLength(1);
@@ -23,18 +35,7 @@ namespace Battleship
             return false;
         }
 
-        public static int Count(this EBoard[,] board, Func<EBoard, bool> predicate)
-        {
-            int c = 0;
-
-            foreach (var e in board)
-                if (predicate(e))
-                    c++;
-
-            return c;
-        }
-
-        public static void Print(this EBoard[,] board, int left, int top)
+        public static void Print(this Grid[,] board, int left, int top)
         {
             for (int i = 0; i < 10; i++)
             {
@@ -51,18 +52,6 @@ namespace Battleship
             left += 3;
             top += 2;
 
-            string ship = "/----\\" +
-                          "| [] |" +
-                          "\\----/";
-
-            string hit = " \\  / " +
-                         "  ><  " +
-                         " /  \\ ";
-
-            string neutral = "^^^^^^" +
-                             "^^^^^^" +
-                             "^^^^^^";
-
             for (int y = 0; y < 10; y++)
             {
                 for (int x = 0; x < 10; x++)
@@ -71,31 +60,31 @@ namespace Battleship
 
                     switch (board[x, y])
                     {
-                        case (EBoard.Hit):
+                        case (Grid.Hit):
                             hit.DrawRect(6, ConsoleColor.DarkRed);
                             break;
 
-                        case (EBoard.Ship):
+                        case (Grid.Ship):
                             ship.DrawRect(6, ConsoleColor.DarkBlue);
                             break;
 
-                        case (EBoard.Miss):
+                        case (Grid.Miss):
                             hit.DrawRect(6, ConsoleColor.DarkGray);
                             break;
 
-                        case (EBoard.Neutral):
-                            neutral.DrawRect(6, ConsoleColor.Blue, ConsoleColor.Cyan);
+                        case (Grid.Neutral):
+                            neutral.DrawRect(6, ConsoleColor.Cyan, ConsoleColor.Blue);
                             break;
 
-                        case (EBoard.DeadZone):
-                            neutral.DrawRect(6, ConsoleColor.DarkGray);
+                        case (Grid.DeadZone):
+                            neutral.DrawRect(6, ConsoleColor.DarkCyan, ConsoleColor.Black);
                             break;
 
-                        case (EBoard.InvalidShip):
+                        case (Grid.InvalidShip):
                             ship.DrawRect(6, ConsoleColor.DarkRed);
                             break;
 
-                        case (EBoard.DeadShip):
+                        case (Grid.DeadShip):
                             ship.DrawRect(6, ConsoleColor.DarkGray, ConsoleColor.Black);
                             break;
                     }
@@ -103,7 +92,7 @@ namespace Battleship
             }
         }
 
-        public static EBoard[,] PlaceShipsRandomly()
+        public static Grid[,] PlaceShipsRandomly()
         {
             Console.Clear();
 
@@ -113,8 +102,8 @@ namespace Battleship
 
             while (true)
             {
-                EBoard[,] boardToReturn = new EBoard[10, 10];
-                EBoard[,] tmpBoard = new EBoard[10, 10];
+                Grid[,] boardToReturn = new Grid[10, 10];
+                Grid[,] tmpBoard = new Grid[10, 10];
 
                 for (int i = 0; i < Ship.ShipLengths.Count(); i++)
                 {
@@ -124,7 +113,7 @@ namespace Battleship
                         tmpBoard = Utilities.DeepClone(boardToReturn);
                         tmpBoard.placeShip(ship);
 
-                        if (!tmpBoard.Any(item => item == EBoard.InvalidShip))
+                        if (!tmpBoard.Any(item => item == Grid.InvalidShip))
                         {
                             boardToReturn = Utilities.DeepClone(tmpBoard);
                             break;
@@ -149,7 +138,7 @@ namespace Battleship
             }
         }
 
-        public static EBoard[,] PlaceShipsByPlayerInput()
+        public static Grid[,] PlaceShipsByPlayerInput()
         {
             Console.Clear();
 
@@ -162,8 +151,8 @@ namespace Battleship
                 "SPACE: Direction\n" +
                 "ENTER: Done", 153, 22);
 
-            EBoard[,] boardToReturn = new EBoard[10, 10]; 
-            EBoard[,] tmpBoard = new EBoard[10, 10];
+            Grid[,] boardToReturn = new Grid[10, 10]; 
+            Grid[,] tmpBoard = new Grid[10, 10];
 
             for (int i = 0; i < Ship.ShipLengths.Count(); i++)
             {
@@ -198,7 +187,7 @@ namespace Battleship
                             break;
 
                         case ConsoleKey.Enter:
-                            if (!tmpBoard.Any(item => item == EBoard.InvalidShip))
+                            if (!tmpBoard.Any(item => item == Grid.InvalidShip))
                             {
                                 boardToReturn = Utilities.DeepClone(tmpBoard);
                                 done = true;
@@ -214,7 +203,7 @@ namespace Battleship
             return boardToReturn;
         }
 
-        private static EBoard[,] placeShip(this EBoard[,] board, Ship ship)
+        private static Grid[,] placeShip(this Grid[,] board, Ship ship)
         {
             bool isInvalid = ifShipPlacementWillBeInvalid(board, ship);
 
@@ -223,7 +212,7 @@ namespace Battleship
 
             for (int i = 0; i < ship.Length; i++)
             {
-                try { board[x, y] = isInvalid ? EBoard.InvalidShip : EBoard.Ship; }
+                try { board[x, y] = isInvalid ? Grid.InvalidShip : Grid.Ship; }
                 catch (IndexOutOfRangeException) { continue; }
 
                 if (ship.IsVertical)
@@ -235,7 +224,7 @@ namespace Battleship
             return board;
         }
 
-        private static bool ifShipPlacementWillBeInvalid(EBoard[,] board, Ship ship)
+        private static bool ifShipPlacementWillBeInvalid(Grid[,] board, Ship ship)
         {
             int x = ship.StartPosX;
             int y = ship.StartPosY;
@@ -254,7 +243,7 @@ namespace Battleship
             return false;
         }
 
-        private static bool ifShipBlockIsInvalid(EBoard[,] board, Ship ship, int blockX, int blockY, bool firstBlock)
+        private static bool ifShipBlockIsInvalid(Grid[,] board, Ship ship, int blockX, int blockY, bool firstBlock)
         {
             blockX--;
             blockY--;
@@ -279,7 +268,7 @@ namespace Battleship
                             }
                         }
 
-                        if (board[blockX + x, blockY + y] == EBoard.Ship)
+                        if (board[blockX + x, blockY + y] == Grid.Ship)
                             return true;
                     }
                     catch (IndexOutOfRangeException) { continue; }

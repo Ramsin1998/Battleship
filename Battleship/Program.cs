@@ -39,7 +39,7 @@ namespace Battleship
             }
         }
 
-        static void secretScript()
+        static void script()
         {
             Console.Clear();
 
@@ -53,11 +53,6 @@ namespace Battleship
             game();
         }
 
-        static void mainScript()
-        {
-            Console.WriteLine("cuntfacemcgee");
-        }
-
         static void game()
         {
             Players[0].Opponent = Players[1];
@@ -65,35 +60,37 @@ namespace Battleship
 
             while (true)
                 foreach (var player in Players)
-                {
                     player.StartTurn();
-
-                    if (!player.Opponent.PersonalBoard.Any(e => e == EBoard.Ship))
-                        WinningSequence(player);
-                }
         }
 
         public static void WinningSequence(Player winner)
         {
             Console.Clear();
 
-            Console.WriteLine(winner.Name);
+            Utilities.TypeWrite($"!!! {winner.Name} IS THE WINNER !!!");
 
-            Console.ReadLine();
+            Utilities.Wait(1500);
+
+            Random rng = new Random();
+
+            for (int i = 0; i < 1000; i++)
+            {
+                Console.BackgroundColor = (ConsoleColor)rng.Next(0, 16);
+                Console.ForegroundColor = (ConsoleColor)rng.Next(0, 16);
+
+                Utilities.TypeWrite($"!!! {winner.Name} IS THE WINNER !!!", rng.Next(0, Console.BufferWidth - winner.Name.Length), rng.Next(0, Console.BufferHeight - winner.Name.Length), 1);
+            }
         }
 
         static void Main(string[] args)
         {
             intro();
 
-            Utilities.TypeWrite("Your name: ");
+            script();
 
-            string input = Utilities.GetText();
-            if (input == "2")
-                secretScript();
+            WinningSequence(Players[0]);
 
-            else
-                mainScript();
+            //secretScript();
         }
     }
 }
