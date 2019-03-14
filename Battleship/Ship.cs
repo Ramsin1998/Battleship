@@ -8,11 +8,11 @@ namespace Battleship
 {
     public struct Ship
     {
-        private bool isVertical;
-        private int startPosY;
-        private int startPosX;
+        private bool isVertical; //Ship orientation.
+        private int startPosY; //The starting position of the ship. The X and Y of first block of the ship.
+        private int startPosX; //
 
-        public int Length { get; set; }
+        public int Length;
 
         public bool IsVertical
         {
@@ -92,6 +92,9 @@ namespace Battleship
             }
         }
 
-        public static int[] ShipLengths = { 2, 3, 3, 4, 5 };
+        /// <summary>
+        /// All the ships each player gets. Represented by their lengths.
+        /// </summary>
+        public static int[] Ships = { 2, 3, 3, 4, 5 }; 
     }
 }

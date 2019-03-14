@@ -6,22 +6,34 @@ using System.Threading.Tasks;
 
 namespace Battleship
 {
+    /// <summary>
+    /// Contains the enumerated values that a position on an attackboard or personalboard can be.
+    /// </summary>
     enum Grid { Neutral, Hit, Miss, Ship, InvalidShip, DeadShip, DeadZone }
 
+    /// <summary>
+    /// Static class containing methods for the manipulation of battleship boards.
+    /// </summary>
     static class Board
     {
-        private static string ship = "/----\\" +
-                                     "| [] |" +
-                                    "\\----/";
+        private static string ship = "/----\\" +//
+                                     "| [] |" +// The style of a ship block on the console.
+                                    "\\----/";//
 
-        private static string hit = " \\  / " +
-                                    "  ><  " +
-                                    " /  \\ ";
+        private static string hit = " \\  / " +//
+                                    "  ><  " +// The style of a hit block on the console.
+                                    " /  \\ ";//
 
-        private static string neutral = "^^^^^^" +
-                                        "^^^^^^" +
-                                        "^^^^^^";
+        private static string neutral = "^^^^^^" +//
+                                        "^^^^^^" +// The style of a neutral block on the console.
+                                        "^^^^^^";//
 
+        /// <summary>
+        /// Determines whether any block in a board satisfies a condition.
+        /// </summary>
+        /// <param name="board">A board whose elements to apply the predicate to.</param>
+        /// <param name="predicate">A function to test each element for a condition.</param>
+        /// <returns></returns>
         public static bool Any(this Grid[,] board, Func<Grid,bool> predicate)
         {
             int xLength = board.GetLength(0);
@@ -35,6 +47,12 @@ namespace Battleship
             return false;
         }
 
+        /// <summary>
+        /// Prints out a board in the console.
+        /// </summary>
+        /// <param name="board">A board to print out.</param>
+        /// <param name="left">Left location to print in the console.</param>
+        /// <param name="top">Top location to print in the console.</param>
         public static void Print(this Grid[,] board, int left, int top)
         {
             for (int i = 0; i < 10; i++)
@@ -92,6 +110,10 @@ namespace Battleship
             }
         }
 
+        /// <summary>
+        /// Places each ship on a board randomly and repeats if player chooses so.
+        /// </summary>
+        /// <returns>A board containing the placed ships.</returns>
         public static Grid[,] PlaceShipsRandomly()
         {
             Console.Clear();
@@ -105,11 +127,11 @@ namespace Battleship
                 Grid[,] boardToReturn = new Grid[10, 10];
                 Grid[,] tmpBoard = new Grid[10, 10];
 
-                for (int i = 0; i < Ship.ShipLengths.Count(); i++)
+                for (int i = 0; i < Ship.Ships.Count(); i++)
                 {
                     while (true)
                     {
-                        Ship ship = new Ship(Ship.ShipLengths[i], true);
+                        Ship ship = new Ship(Ship.Ships[i], true);
                         tmpBoard = Utilities.DeepClone(boardToReturn);
                         tmpBoard.placeShip(ship);
 
@@ -138,6 +160,10 @@ namespace Battleship
             }
         }
 
+        /// <summary>
+        /// Allows the player to places his ships on a board with user input.
+        /// </summary>
+        /// <returns>A board containing the placed ships.</returns>
         public static Grid[,] PlaceShipsByPlayerInput()
         {
             Console.Clear();
@@ -154,9 +180,9 @@ namespace Battleship
             Grid[,] boardToReturn = new Grid[10, 10]; 
             Grid[,] tmpBoard = new Grid[10, 10];
 
-            for (int i = 0; i < Ship.ShipLengths.Count(); i++)
+            for (int i = 0; i < Ship.Ships.Count(); i++)
             {
-                Ship ship = new Ship(Ship.ShipLengths[i], false);
+                Ship ship = new Ship(Ship.Ships[i], false);
 
                 bool done = false;
                 while (!done)
@@ -203,6 +229,12 @@ namespace Battleship
             return boardToReturn;
         }
 
+        /// <summary>
+        /// Places a ship on a board.
+        /// </summary>
+        /// <param name="board">Board to place the ship on.</param>
+        /// <param name="ship">Ship to place.</param>
+        /// <returns></returns>
         private static Grid[,] placeShip(this Grid[,] board, Ship ship)
         {
             bool isInvalid = ifShipPlacementWillBeInvalid(board, ship);
@@ -224,6 +256,12 @@ namespace Battleship
             return board;
         }
 
+        /// <summary>
+        /// Checks if ship will be have an invalid placement.
+        /// </summary>
+        /// <param name="board">The board the ship will be placed on.</param>
+        /// <param name="ship">The ship to check.</param>
+        /// <returns></returns>
         private static bool ifShipPlacementWillBeInvalid(Grid[,] board, Ship ship)
         {
             int x = ship.StartPosX;
@@ -231,7 +269,7 @@ namespace Battleship
 
             for (int i = 0; i < ship.Length; i++)
             {
-                if (ifShipBlockIsInvalid(board, ship, x, y, i == 0))
+                if (ifShipBlockIsInvalid(board, ship.IsVertical, x, y, i == 0))
                     return true;
 
                 if (ship.IsVertical)
@@ -243,7 +281,16 @@ namespace Battleship
             return false;
         }
 
-        private static bool ifShipBlockIsInvalid(Grid[,] board, Ship ship, int blockX, int blockY, bool firstBlock)
+        /// <summary>
+        /// Checks if a single ship block will have an invalid placement.
+        /// </summary>
+        /// <param name="board">The board the ship will be placed on.</param>
+        /// <param name="isVertical">The ships orientation.</param>
+        /// <param name="blockX">X poistion of the block on the board.</param>
+        /// <param name="blockY">Y position of the block on the board.</param>
+        /// <param name="firstBlock">Whether it's the first block of the ship.</param>
+        /// <returns></returns>
+        private static bool ifShipBlockIsInvalid(Grid[,] board, bool isVertical, int blockX, int blockY, bool firstBlock)
         {
             blockX--;
             blockY--;
@@ -255,7 +302,7 @@ namespace Battleship
                     {
                         if (!firstBlock)
                         {
-                            if (ship.IsVertical)
+                            if (isVertical)
                             {
                                 if (y == 0 && x == 1)
                                     continue;

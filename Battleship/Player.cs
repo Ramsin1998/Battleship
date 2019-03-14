@@ -8,6 +8,7 @@ namespace Battleship
 {
     class Player 
     {
+        //////////////////////// The cursor is displayed on top of the attackboard using these coordinates.
         private int cursorPosX = 0;
         private int cursorPosY = 0;
 
@@ -44,13 +45,19 @@ namespace Battleship
                     cursorPosY = value;
             }
         }
+        ////////////////////////
 
-        public Grid[,] AttckBoard = new Grid[10, 10];
-        public Grid[,] PersonalBoard = new Grid[10, 10];
+        public Grid[,] AttckBoard = new Grid[10, 10]; //The player's attack attempts are stored here.
+        public Grid[,] PersonalBoard = new Grid[10, 10]; //The player's ships are placed here.
 
         public Player Opponent;
 
         public string Name;
+
+        /// <summary>
+        /// Creates a new player class and lets the user choose setup up the board.
+        /// </summary>
+        /// <param name="name">Name of the player</param>
         public Player(string name)
         {
             Name = name;
@@ -66,6 +73,9 @@ namespace Battleship
             Console.Clear();
         }
 
+        /// <summary>
+        /// Starts turn of the corresponding player.
+        /// </summary>
         public void StartTurn()
         {
             Utilities.TypeWrite($"It's player {Name}'s turn", 117, 4);
