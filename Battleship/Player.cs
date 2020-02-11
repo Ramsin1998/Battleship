@@ -155,7 +155,7 @@ namespace Battleship
                         }
 
                         if (!Opponent.PersonalBoard.Any(e => e == Grid.Ship))
-                            Program.WinningSequence(Opponent.Opponent);
+                            Program.WinningSequence(this);
 
                         break;
                 }
